@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { updateArr, updateEditIndex } from "../Redux/Slice";
+import {updateReduxState} from "../Redux/Slice";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { toast, ToastContainer } from "react-toastify";
@@ -38,7 +38,7 @@ const TableData = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         let tempData = state.arr?.filter((e, i) => i !== index);
-        dispatch(updateArr(tempData));
+        dispatch(updateReduxState({arr:tempData}));
         iconsSuccess("Record deleted successfully");
       }
     });
@@ -82,7 +82,7 @@ const TableData = () => {
                         <button
                           className="btn btn-secondary"
                           onClick={() => {
-                            dispatch(updateEditIndex(index));
+                            dispatch(updateReduxState({editIndex:index}));
                             document.documentElement.scrollTop = 0;
                           }}
                         >

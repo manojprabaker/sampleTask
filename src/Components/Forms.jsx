@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useSelector, useDispatch } from "react-redux";
-import { updateArr, updateEditIndex } from "../Redux/Slice";
+import { updateReduxState} from "../Redux/Slice";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { signupValidation } from "./Yup";
@@ -37,16 +37,16 @@ const Forms = () => {
       let updatedTasks = state.arr;
       let tempData = [...updatedTasks, values];
       resetForm();
-      dispatch(updateArr(tempData));
+      dispatch(updateReduxState({arr:tempData}));
       iconsSuccess("Record saved sucessfully");
     } else {
       console.log(values, "date before edit");
       // values.date = values?.date.toString();
       let tempData = [...state.arr];
       tempData[state?.editIndex] = values;
-      dispatch(updateArr(tempData));
+      dispatch(updateReduxState({arr:tempData}));
       setEditData(initalValues);
-      dispatch(updateEditIndex(null));
+      dispatch(updateReduxState({editIndex:null}));
       iconsSuccess("Record edited sucessfully");
       //  let newTempData=tempData?.map((item,index)=> index===state?.editIndex ?values :item)
     }

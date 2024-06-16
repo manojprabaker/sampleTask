@@ -6,15 +6,16 @@ const Slice = createSlice({
     arr: [],
     editIndex:null,
   },  
-  reducers: {   
-    updateArr: (state, action) => {
-      state.arr = action.payload;
+  reducers: {
+    updateReduxState: ( state, action ) =>
+    {
+      return {
+        ...state,
+        ...action.payload,
+      };
     },
-    updateEditIndex:(state,action)=>{
-      state.editIndex=action.payload;
-    }
   },
 });
 
-export const { updateArr,updateEditIndex } = Slice.actions;
+export const { updateReduxState } = Slice.actions;
 export default Slice.reducer;
