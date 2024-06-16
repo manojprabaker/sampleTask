@@ -39,7 +39,7 @@ const TableData = () => {
       if (result.isConfirmed) {
         let tempData = state.arr?.filter((e, i) => i !== index);
         dispatch(updateArr(tempData));
-        iconsSuccess('Record deleted successfully')
+        iconsSuccess("Record deleted successfully");
       }
     });
   };
@@ -51,11 +51,9 @@ const TableData = () => {
     return `${currDate} ${currMonth} ${currYear}`;
   };
 
-
   return (
     <>
       <div className="container">
-     
         <table class="table table-hover table-striped table-bordered">
           <thead>
             <tr>
@@ -85,6 +83,7 @@ const TableData = () => {
                           className="btn btn-secondary"
                           onClick={() => {
                             dispatch(updateEditIndex(index));
+                            document.documentElement.scrollTop = 0;
                           }}
                         >
                           Edit
@@ -97,7 +96,6 @@ const TableData = () => {
                         >
                           Delete
                         </button>
-                      
                       </td>
                     </tr>
                   </>
