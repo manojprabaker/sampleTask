@@ -43,11 +43,12 @@
   .cursor-pointer {
   cursor: pointer;
   }
-  /* password widget */
-  pwdfield {
-  width: 100%;
+  td,th {
+    text-align: center;
   }
-  .pwdopsdiv {
+  /* password widget */
+ 
+  /* .pwdopsdiv {
   display: block;
   float: left;
   margin-right: 6px;
@@ -55,4 +56,4 @@
   .pwdopsdiv a {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 10px;
-  }
+  } */

@@ -3,10 +3,11 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
 import { useSelector, useDispatch } from "react-redux";
 import { updateArr, updateEditIndex } from "../Redux/Slice";
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
+import { signupValidation } from "./Yup";
 const Forms = () => {
   const initalValues = {
     firstName: "",
@@ -20,63 +21,41 @@ const Forms = () => {
     skills: [],
     date: new Date(),
   };
-  let savedValues = {
-    firstName: "Manoj",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    jobRole: "qa",
-    about: "HAHHA",
-    gender: "male",
-    skills: ["angularjs", "reactjs"],
-    date: "Mon Jun 17 2024 22:06:17 GMT+0530 (India Standard Time)",
-  };
+
   const [editData, setEditData] = useState(null);
   const dispatch = useDispatch();
-  const [formValues, setformValues] = useState([]);
+
   const state = useSelector(({ data }) => data);
 
+  const iconsSuccess = (message) =>
+    toast.success(
+      <p className="mx-2 tx-16 d-flex align-items-center mb-0 ">{message}</p>
+    );
   const handleSubmit = (values, { setSubmitting, resetForm }) => {
-    if(state?.editIndex===null)
-      {
-       // console.log(values, "answer");
-        values.date = values?.date.toString();
-        let updatedTasks = state.arr;
-        // console.log(updatedTasks,"redux");
-        let tempData = [...updatedTasks, values];
-    
-        resetForm();
-        dispatch(updateArr(tempData));
-      }
-      else{
-        values.date = values?.date.toString();
-       // console.log(values, "edited answer");
-       
-        let tempData=state.arr
-       // tempData[state?.editIndex]=values;
-      // console.log(tempData[state?.editIndex],"edit edit");
-     //  console.log(tempData,"array");
-       let newTempData=tempData?.map((item,index)=> index===state?.editIndex ?values :item)
-     //  console.log(newTempData,"new DATATATTATA");
-      // resetForm();
-       dispatch(updateArr(newTempData));
-       dispatch(updateEditIndex(null))
-       setEditData(initalValues)
-      }
-    
+    if (state?.editIndex === null) {
+      values.date = values?.date.toString();
+      let updatedTasks = state.arr;
+      let tempData = [...updatedTasks, values];
+      resetForm();
+      dispatch(updateArr(tempData));
+      iconsSuccess("Record saved sucessfully");
+    } else {
+      console.log(values, "date before edit");
+      // values.date = values?.date.toString();
+      let tempData = [...state.arr];
+      tempData[state?.editIndex] = values;
+      dispatch(updateArr(tempData));
+      setEditData(initalValues);
+      dispatch(updateEditIndex(null));
+      iconsSuccess("Record edited sucessfully");
+      //  let newTempData=tempData?.map((item,index)=> index===state?.editIndex ?values :item)
+    }
   };
 
   useEffect(() => {
-    if(state?.editIndex!==null)
-      {
-    // console.log(
-    //   state?.arr[state?.editIndex],
-    //   state?.editIndex,
-    //   "edited Values"
-    // );
-    setEditData(state?.arr[state?.editIndex]);
-  }
+    if (state?.editIndex !== null) {
+      setEditData(state?.arr[state?.editIndex]);
+    }
   }, [state?.editIndex]);
   return (
     <div className="container">
@@ -85,30 +64,7 @@ const Forms = () => {
           <Formik
             initialValues={editData || initalValues}
             enableReinitialize
-            validationSchema={Yup.object({
-              firstName: Yup.string().required("Required"),
-              lastName: Yup.string().required("Required"),
-              email: Yup.string()
-                .email("Invalid email")
-                .required("Please Enter your Email"),
-              password: Yup.string()
-                .matches(
-                  /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{1,}$/,
-                  "Password must containe minimum 8 characters, at least one letter and one number"
-                )
-                .required("Please Enter Password"),
-              confirmPassword: Yup.string()
-                .required("Please enter confirm password")
-                .oneOf([Yup.ref("password"), null], "Password did not match"),
-              jobRole: Yup.string()
-                .oneOf(["dev", "des", "qa"])
-                .required("Please Select Job Role"),
-              gender: Yup.string().required("Please Select Gender"),
-              about: Yup.string()
-                .max(200, "Must be less than 200")
-                .required("Please Enter Details"),
-              skills: Yup.array().min(1, "Please Select anyone"),
-            })}
+            validationSchema={signupValidation}
             onSubmit={handleSubmit}
           >
             {({ isSubmitting, values, setFieldValue }) => (
@@ -299,13 +255,6 @@ Password"
                     onChange={(date) => setFieldValue("date", date)}
                   />
 
-                  <button
-                    className="btn btn-lg btn-primary btn-block"
-                    type="submit"
-                  >
-                    Sign up
-                  </button>
-
                   {/* <div>
                     <button
                       type="button"
@@ -318,6 +267,11 @@ Password"
                   </div> */}
                   <div>
                     <button type="reset">Reset</button>
+                  </div>
+                  <div>
+                    <button className="btn w-100  btn-primary " type="submit">
+                      Sign up
+                    </button>
                   </div>
                 </Form>
               </>
